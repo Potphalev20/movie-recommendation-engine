@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMatch - Your Cinema Universe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ─── Reset ─────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ─── Variables ─────────────────────────────── */
+        :root {
+            --gold:        #C9A84C;
+            --gold-light:  #E8C96A;
+            --gold-dim:    rgba(201,168,76,0.18);
+            --black:       #080808;
+            --dark:        #101010;
+            --dark-2:      #161616;
+            --dark-3:      #1e1e1e;
+            --text:        #ede5d4;
+            --muted:       #6b6050;
+            --border:      rgba(201,168,76,0.22);
+            --serif:       'Cormorant Garamond', Georgia, serif;
+            --sans:        'Jost', system-ui, sans-serif;
+        }
+
+        /* ─── Base ──────────────────────────────────── */
+        html, body {
+            height: 100%;
+            font-family: var(--sans);
+            background: var(--black);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        /* ─── Background atmosphere ─────────────────── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 20% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 60% at 80% 20%, rgba(201,168,76,0.04) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ─── Film strips (decorative) ──────────────── */
+        .film-strip {
+            position: fixed;
+            top: 0; bottom: 0;
+            width: 22px;
+            background: var(--dark-2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1;
+        }
+        .film-strip.fs-left  { left:  0; border-right: 1px solid var(--border); }
+        .film-strip.fs-right { right: 0; border-left:  1px solid var(--border); }
+        .film-hole {
+            width: 11px; height: 8px;
+            border-radius: 2px;
+            border: 1px solid rgba(201,168,76,0.35);
+        }
+
+        /* ─── Card ──────────────────────────────────── */
+        .card {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 940px;
+            display: flex;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 1px var(--border),
+                0 32px 80px rgba(0,0,0,0.85),
+                0 0 80px rgba(201,168,76,0.05);
+            animation: cardRise 0.8s cubic-bezier(0.16,1,0.3,1) both;
+        }
+
+        @keyframes cardRise {
+            from { opacity:0; transform: translateY(28px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+
+        /* ─── Brand panel ───────────────────────────── */
+        .brand-panel {
+            width: 340px;
+            flex-shrink: 0;
+            background: var(--dark-2);
+            border-right: 1px solid var(--border);
+            padding: 3rem 2.5rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-panel::before {
+            content: '';
+            position: absolute;
+            top: -120px; left: -120px;
+            width: 320px; height: 320px;
+            background: radial-gradient(circle, rgba(201,168,76,0.13) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        .brand-panel::after {
+            content: '';
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 100px; height: 100px;
+            background: linear-gradient(135deg, transparent 50%, rgba(201,168,76,0.07) 50%);
+        }
+
+        .brand-top { position: relative; z-index: 2; }
+
+        /* Logo mark — FIXED SIZE */
+        .logo-mark {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1.6rem;
+            display: block;
+            flex-shrink: 0;
+        }
+
+        .logo-mark svg {
+            width: 64px !important;
+            height: 64px !important;
+            display: block;
+        }
+
+        .logo-ring-anim {
+            animation: spinRing 12s linear infinite;
+            transform-origin: 32px 32px;
+        }
+
+        @keyframes spinRing {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+
+        .logo-pulse {
+            animation: logoPulse 2.8s ease-in-out infinite;
+            transform-origin: 32px 32px;
+        }
+
+        @keyframes logoPulse {
+            0%,100% { opacity: 0.3; transform: scale(1.06); }
+            50%     { opacity: 0.65; transform: scale(1.16); }
+        }
+
+        /* Brand name */
+        .brand-name {
+            font-family: var(--serif);
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: var(--gold-light);
+            letter-spacing: 0.03em;
+            line-height: 1;
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+
+        .brand-tag {
+            font-size: 0.68rem;
+            font-weight: 300;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 2rem;
+            display: block;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 1.8rem;
+        }
+        .divider-line { flex:1; height:1px; background: var(--border); }
+        .divider-gem  { color: var(--gold); font-size: 0.55rem; opacity: 0.7; }
+
+        /* Features */
+        .features { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
+        .features li {
+            font-size: 0.78rem;
+            font-weight: 300;
+            letter-spacing: 0.04em;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+        .feat-dot {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--gold);
+            flex-shrink: 0;
+            opacity: 0.7;
+        }
+
+        /* DB link */
+        .db-link {
+            position: relative;
+            z-index: 2;
+            font-size: 0.68rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            border-bottom: 1px solid transparent;
+            padding-bottom: 2px;
+            transition: color 0.3s, border-color 0.3s;
+        }
+        .db-link:hover { color: var(--gold); border-color: var(--gold); }
+
+        /* ─── Form panel ────────────────────────────── */
+        .form-panel {
+            flex: 1;
+            background: var(--dark);
+            padding: 2.8rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 520px;
+        }
+
+        /* Flash from server */
+        #flash-message { margin-bottom: 0.75rem; }
+
+        .alert {
+            padding: 0.6rem 1rem;
+            border-radius: 3px;
+            font-size: 0.78rem;
+            margin-bottom: 0.4rem;
+        }
+        .alert-success {
+            background: rgba(70,150,80,0.12);
+            border-left: 3px solid #4caf6a;
+            color: #7ed09a;
+        }
+        .alert-error, .alert-danger {
+            background: rgba(180,50,50,0.12);
+            border-left: 3px solid #c05050;
+            color: #e07070;
+        }
+
+        /* ─── Tab bar ───────────────────────────────── */
+        .tab-bar {
+            display: flex;
+            position: relative;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-family: var(--sans);
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            padding: 0.8rem 0;
+            cursor: pointer;
+            transition: color 0.3s;
+            width: auto;
+            margin-top: 0;
+        }
+        .tab-btn.active { color: var(--gold-light); }
+        .tab-btn:hover:not(.active) { color: var(--text); }
+
+        .tab-slider {
+            position: absolute;
+            bottom: -1px; left: 0;
+            width: 50%; height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            border-radius: 2px 2px 0 0;
+            transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+        }
+        .tab-slider.slide-right { transform: translateX(100%); }
+
+        /* ─── Form ──────────────────────────────────── */
+        .form { display: none; }
+        .form.active {
+            display: block;
+            animation: formAppear 0.38s ease both;
+        }
+        @keyframes formAppear {
+            from { opacity:0; transform: translateY(10px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+
+        .form-head { margin-bottom: 1.8rem; }
+
+        h2 {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.02em;
+            line-height: 1.1;
+            margin-bottom: 0.3rem;
+            text-align: left;
+        }
+
+        .form-sub {
+            font-size: 0.74rem;
+            color: var(--muted);
+            font-weight: 300;
+            letter-spacing: 0.06em;
+            text-align: left;
+        }
+
+        /* Input group */
+        .input-group { margin-bottom: 1.1rem; }
+
+        .input-group label {
+            display: block;
+            font-size: 0.63rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .input-wrap { position: relative; }
+
+        .iicon {
+            position: absolute;
+            left: 0.85rem;
+            top: 50%; transform: translateY(-50%);
+            color: var(--muted);
+            display: flex; align-items: center;
+            pointer-events: none;
+            transition: color 0.25s;
+            z-index: 2;
+        }
+
+        .input-wrap:focus-within .iicon { color: var(--gold); }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.72rem 1rem 0.72rem 2.5rem;
+            background: var(--dark-3);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 3px;
+            font-family: var(--sans);
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: var(--text);
+            margin: 0;
+            outline: none;
+            transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="email"]::placeholder,
+        input[type="password"]::placeholder { color: rgba(107,96,80,0.55); }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: var(--gold);
+            background: rgba(201,168,76,0.05);
+            box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+        }
+
+        /* CTA button */
+        .cta-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            padding: 0.82rem 1.5rem;
+            background: var(--gold);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 3px;
+            font-family: var(--sans);
+            font-size: 0.74rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 0.4rem;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.25s, transform 0.18s, box-shadow 0.25s;
+        }
+
+        .cta-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 55%);
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .cta-btn:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 28px rgba(201,168,76,0.3);
+        }
+        .cta-btn:hover::after { opacity: 1; }
+        .cta-btn:active { transform: translateY(0); }
+
+        /* Switch text */
+        .switch-p {
+            margin-top: 1.4rem;
+            text-align: center;
+            font-size: 0.76rem;
+            color: var(--muted);
+            font-weight: 300;
+        }
+
+        .switch-p a, a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.25s;
+        }
+        .switch-p a:hover, a:hover { color: var(--gold-light); }
+
+        p { text-align: center; margin-top: 0; }
+
+        /* Flash messages inline */
+        .flash-messages { margin-bottom: 0.25rem; }
+        .fade-out { opacity: 0; transition: opacity 0.5s; }
+
+        /* ─── Responsive ────────────────────────────── */
+        @media (max-width: 800px) {
+            .film-strip { display: none; }
+            .card { flex-direction: column; max-width: 440px; }
+            .brand-panel {
+                width: 100%;
+                padding: 2rem 2rem 1.5rem;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            .brand-panel::before { display: none; }
+            .features { display: none; }
+            .brand-name { font-size: 2rem; }
+            .form-panel { padding: 2rem; min-height: auto; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 1rem; }
+            .form-panel { padding: 1.5rem; }
+            h2 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Decorative film strips -->
+    <div class="film-strip fs-left">
+        <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
+        <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
+        <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
+        <div class="film-hole"></div><div class="film-hole"></div>
+    </div>
+    <div class="film-strip fs-right">
+        <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
+        <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
+        <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
+        <div class="film-hole"></div><div class="film-hole"></div>
+    </div>
+
+    <div class="card">
+
+        <!-- ── Brand panel ── -->
+        <div class="brand-panel">
+            <div class="brand-top">
+
+                <!-- SVG logo — strictly sized 64x64, no external resource -->
+                <div class="logo-mark">
+                    <svg viewBox="0 0 64 64" width="64" height="64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="logo-pulse" cx="32" cy="32" r="30"
+                            stroke="rgba(201,168,76,0.25)" stroke-width="1"/>
+                        <circle class="logo-ring-anim" cx="32" cy="32" r="26"
+                            stroke="#C9A84C" stroke-width="1"
+                            stroke-dasharray="5 4" stroke-linecap="round"/>
+                        <circle cx="32" cy="32" r="18" fill="#161616" stroke="#C9A84C" stroke-width="1"/>
+                        <polygon points="27,24 27,40 43,32" fill="#C9A84C"/>
+                    </svg>
+                </div>
+
+                <span class="brand-name">CineMatch</span>
+                <span class="brand-tag">Your Cinematic Universe Awaits</span>
+
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <span class="divider-gem">◆</span>
+                    <div class="divider-line"></div>
+                </div>
+
+                <ul class="features">
+                    <li><span class="feat-dot"></span>Curated Recommendations</li>
+                    <li><span class="feat-dot"></span>Personal Watchlists</li>
+                    <li><span class="feat-dot"></span>Genre Discovery</li>
+                </ul>
+            </div>
+
+            <a href="{{url_for('api.database')}}" class="db-link">
+                Browse Database
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                </svg>
+            </a>
+        </div>
+
+        <!-- ── Form panel ── -->
+        <div class="form-panel">
+
+            <!-- Server flash messages -->
+            <div id="flash-message">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Tab switcher -->
+            <div class="tab-bar">
+                <button class="tab-btn active" id="tab-login"
+                        onclick="switchTab('login')">Login</button>
+                <button class="tab-btn" id="tab-register"
+                        onclick="switchTab('register')">Register</button>
+                <div class="tab-slider" id="tab-slider"></div>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form id="login-form" class="form active" action="/login" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="flash-messages" id="flash-messages"></div>
+
+                <div class="form-head">
+                    <h2>Welcome Back</h2>
+                    <p class="form-sub">Sign in to continue your journey</p>
+                </div>
+
+                <div class="input-group">
+                    <label>Username</label>
+                    <div class="input-wrap">
+                        <span class="iicon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="1.8">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </span>
+                        <input type="text" name="username"
+                               placeholder="Enter your username" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <div class="input-wrap">
+                        <span class="iicon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="1.8">
+                                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                        </span>
+                        <input type="password" name="password"
+                               placeholder="Enter your password" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="cta-btn">
+                    <span>Sign In</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2.2">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </button>
+
+                <p class="switch-p">
+                    Don't have an account?
+                    <a href="#" onclick="switchTab('register'); return false;">Register here</a>
+                </p>
+            </form>
+
+            <!-- REGISTER FORM -->
+            <form id="register-form" class="form" action="/register" method="POST"
+                  onsubmit="return validatePassword(this)">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="flash-messages" id="flash-messages-register"></div>
+
+                <div class="form-head">
+                    <h2>Create Account</h2>
+                    <p class="form-sub">Join the cinematic experience</p>
+                </div>
+
+                <div class="input-group">
+                    <label>Username</label>
+                    <div class="input-wrap">
+                        <span class="iicon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="1.8">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </span>
+                        <input type="text" name="username"
+                               placeholder="Choose a username" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Email</label>
+                    <div class="input-wrap">
+                        <span class="iicon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="1.8">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                        </span>
+                        <input type="email" name="email"
+                               placeholder="Enter your email" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <div class="input-wrap">
+                        <span class="iicon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="1.8">
+                                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                        </span>
+                        <input type="password" name="password"
+                               placeholder="Min. 6 characters" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="cta-btn">
+                    <span>Create Account</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2.2">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </button>
+
+                <p class="switch-p">
+                    Already have an account?
+                    <a href="#" onclick="switchTab('login'); return false;">Login here</a>
+                </p>
+            </form>
+
+        </div><!-- /form-panel -->
+    </div><!-- /card -->
+
+    <script>
+        /* ── Tab switcher ── */
+        function switchTab(tab) {
+            var loginForm    = document.getElementById('login-form');
+            var registerForm = document.getElementById('register-form');
+            var tabLogin     = document.getElementById('tab-login');
+            var tabRegister  = document.getElementById('tab-register');
+            var slider       = document.getElementById('tab-slider');
+
+            if (tab === 'login') {
+                loginForm.classList.add('active');
+                registerForm.classList.remove('active');
+                tabLogin.classList.add('active');
+                tabRegister.classList.remove('active');
+                slider.classList.remove('slide-right');
+            } else {
+                registerForm.classList.add('active');
+                loginForm.classList.remove('active');
+                tabRegister.classList.add('active');
+                tabLogin.classList.remove('active');
+                slider.classList.add('slide-right');
+            }
+        }
+
+        /* ── Password validation ── */
+        function validatePassword(form) {
+            if (form.password.value.length < 6) {
+                showFloatingMessage('Password must be at least 6 characters.', 'error');
+                return false;
+            }
+            return true;
+        }
+
+        /* ── Auto-hide server flash messages ── */
+        function autoHide(id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            var alerts = el.querySelectorAll('.alert');
+            if (!alerts.length) return;
+            setTimeout(function() {
+                el.style.transition = 'opacity 0.5s';
+                el.style.opacity = '0';
+                setTimeout(function() { el.innerHTML = ''; el.style.opacity = '1'; }, 520);
+            }, 3500);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            autoHide('flash-message');
+            autoHide('flash-messages');
+            autoHide('flash-messages-register');
+        });
+
+        /* ── Floating message utility ── */
+        function showFloatingMessage(msg, type) {
+            var old = document.getElementById('_cm_float');
+            if (old) old.remove();
+            var el = document.createElement('div');
+            el.id = '_cm_float';
+            el.textContent = msg;
+            el.style.cssText = [
+                'position:fixed', 'top:1.5rem', 'left:50%',
+                'transform:translateX(-50%)',
+                'background:' + (type === 'success'
+                    ? 'rgba(40,110,55,0.96)' : 'rgba(140,40,40,0.96)'),
+                'color:#ede5d4',
+                'padding:0.7rem 1.6rem',
+                'border-radius:3px',
+                'font-family:Jost,sans-serif',
+                'font-size:0.8rem',
+                'letter-spacing:0.05em',
+                'z-index:9999',
+                'box-shadow:0 8px 32px rgba(0,0,0,0.6)',
+                'transition:opacity 0.4s'
+            ].join(';');
+            document.body.appendChild(el);
+            setTimeout(function() {
+                el.style.opacity = '0';
+                setTimeout(function() { el.remove(); }, 430);
+            }, 3000);
+        }
+
+        /* ── Wishlist toggle (preserved from original) ── */
+        function toggleWishlist(movieId) {
+            var csrfToken = document.querySelector('input[name="csrf_token"]').value;
+            fetch('/toggle_wishlist/' + movieId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(function(r) {
+                if (r.ok) return r.json();
+                throw new Error('Failed to update wishlist.');
+            })
+            .then(function(data) {
+                if (data.status === 'success') {
+                    showFloatingMessage('Wishlist updated!', 'success');
+                    var btn = document.querySelector('.wishlist-button');
+                    if (btn) btn.textContent = btn.textContent.includes('Add')
+                        ? 'Remove from Wishlist' : 'Add to Wishlist';
+                } else {
+                    showFloatingMessage('Unexpected error.', 'error');
+                }
+            })
+            .catch(function(e) {
+                showFloatingMessage('Error: ' + e.message, 'error');
+            });
+        }
+
+        /* ── Genre helpers (preserved from original) ── */
+        function toggleGenreDropdown() {
+            var d = document.getElementById('genre-dropdown');
+            if (d) d.style.display = d.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function updateGenreForm() {
+            var s = document.getElementById('genre-select');
+            var f = document.getElementById('genre-form');
+            if (s && f) f.action = '/movies_by_genre/' + s.value;
+        }
+
+        function searchMovie() {
+            // extend with your search logic
+        }
+    </script>
+</body>
+</html>

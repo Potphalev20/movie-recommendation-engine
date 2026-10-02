@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMatch — Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold:       #C9A84C;
+            --gold-lt:    #E8C96A;
+            --gold-dim:   rgba(201,168,76,0.14);
+            --gold-glow:  rgba(201,168,76,0.08);
+            --black:      #080808;
+            --dark:       #0f0f0f;
+            --dark-2:     #141414;
+            --dark-3:     #1b1b1b;
+            --dark-4:     #222222;
+            --text:       #f5ead8;
+            --text-2:     #d4c4a8;
+            --muted:      #7a6f5e;
+            --border:     rgba(201,168,76,0.2);
+            --serif:      'Cormorant Garamond', Georgia, serif;
+            --sans:       'Jost', system-ui, sans-serif;
+            --nav-h:      68px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--sans);
+            background: var(--black);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Atmospheric background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 60% 30%, rgba(201,168,76,0.05) 0%, transparent 65%),
+                radial-gradient(ellipse 40% 50% at 10% 80%, rgba(201,168,76,0.03) 0%, transparent 55%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ══════════════════════════
+           TOP NAVIGATION BAR
+        ══════════════════════════ */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: var(--nav-h);
+            background: rgba(8,8,8,0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 2.5rem;
+            z-index: 200;
+            gap: 0;
+        }
+
+        /* Gold left accent bar */
+        .navbar::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+        }
+
+        /* Brand */
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .nav-logo-icon {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+        }
+
+        .nav-logo-ring {
+            animation: spinRing 12s linear infinite;
+            transform-origin: 18px 18px;
+        }
+        @keyframes spinRing {
+            to { transform: rotate(360deg); }
+        }
+
+        .nav-logo-pulse {
+            animation: logoPulse 2.8s ease-in-out infinite;
+            transform-origin: 18px 18px;
+        }
+        @keyframes logoPulse {
+            0%,100% { opacity: 0.25; }
+            50%      { opacity: 0.6; }
+        }
+
+        .nav-title {
+            font-family: var(--serif);
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: var(--gold-lt);
+            letter-spacing: 0.04em;
+            line-height: 1;
+        }
+
+        .nav-subtitle {
+            font-size: 0.65rem;
+            font-weight: 300;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--muted);
+            display: block;
+            margin-top: 1px;
+        }
+
+        /* Nav links */
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            margin-left: auto;
+        }
+
+        .nav-links li a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 0.55rem 1rem;
+            border-radius: 3px;
+            border-bottom: 2px solid transparent;
+            transition: color 0.25s, border-color 0.25s, background 0.25s;
+        }
+
+        .nav-links li a:hover {
+            color: var(--gold-lt);
+            background: var(--gold-dim);
+            border-bottom-color: var(--gold);
+        }
+
+        .nav-links li.nav-signout a:hover {
+            color: #e07070;
+            background: rgba(180,50,50,0.1);
+            border-bottom-color: #c05050;
+        }
+
+        .nav-icon {
+            width: 13px; height: 13px;
+            opacity: 0.7;
+        }
+
+        /* ══════════════════════════
+           PAGE LAYOUT
+        ══════════════════════════ */
+        .page-body {
+            display: flex;
+            min-height: 100vh;
+            padding-top: var(--nav-h);
+        }
+
+        /* ── Left sidebar (thin, decorative) */
+        .sidebar {
+            width: 72px;
+            flex-shrink: 0;
+            background: var(--dark-2);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 0;
+            gap: 1rem;
+            position: sticky;
+            top: var(--nav-h);
+            height: calc(100vh - var(--nav-h));
+            z-index: 10;
+        }
+
+        .sidebar-label {
+            font-size: 0.55rem;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--muted);
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            opacity: 0.6;
+        }
+
+        .sidebar-gem {
+            color: var(--gold);
+            font-size: 0.5rem;
+            opacity: 0.5;
+        }
+
+        .film-strip-v {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            margin-top: auto;
+        }
+        .fhole {
+            width: 11px; height: 8px;
+            border-radius: 2px;
+            border: 1px solid rgba(201,168,76,0.3);
+        }
+
+        /* ── Main content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* ══════════════════════════
+           HERO / SEARCH SECTION
+        ══════════════════════════ */
+        .hero {
+            padding: 3.5rem 3.5rem 2.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 3rem;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+            background: linear-gradient(to right, var(--dark), transparent);
+        }
+
+        @keyframes fadeUp {
+            from { opacity:0; transform: translateY(20px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+
+        .hero-left h1 {
+            font-family: var(--serif);
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 0.02em;
+            line-height: 1.08;
+            margin-bottom: 0.6rem;
+        }
+
+        .hero-left h1 em {
+            font-style: italic;
+            color: var(--gold-lt);
+        }
+
+        .hero-tagline {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: var(--text-2);
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+        }
+
+        /* Search */
+        .search-panel form {
+            display: flex;
+            gap: 0;
+            max-width: 520px;
+        }
+
+        .search-panel input[type="text"] {
+            flex: 1;
+            padding: 0.9rem 1.3rem;
+            background: var(--dark-3);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-right: none;
+            border-radius: 4px 0 0 4px;
+            font-family: var(--sans);
+            font-size: 0.88rem;
+            font-weight: 300;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+        }
+
+        .search-panel input[type="text"]::placeholder { color: var(--muted); }
+        .search-panel input[type="text"]:focus {
+            border-color: var(--gold);
+            background: rgba(201,168,76,0.05);
+            box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+        }
+
+        .search-panel button {
+            padding: 0.9rem 1.8rem;
+            background: var(--gold);
+            color: #060606;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            font-family: var(--sans);
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.25s, box-shadow 0.25s;
+            white-space: nowrap;
+            width: auto;
+            margin: 0;
+        }
+
+        .search-panel button:hover {
+            background: var(--gold-lt);
+            box-shadow: 0 4px 24px rgba(201,168,76,0.35);
+        }
+
+        /* Hero right — quick action cards */
+        .hero-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            min-width: 200px;
+        }
+
+        .action-card {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.9rem 1.1rem;
+            background: var(--dark-3);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-2);
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.2s;
+            width: auto;
+            margin: 0;
+            border-left: 3px solid transparent;
+        }
+
+        .action-card:hover {
+            background: var(--gold-dim);
+            border-color: var(--gold);
+            border-left-color: var(--gold);
+            color: var(--gold-lt);
+            transform: translateX(3px);
+        }
+
+        .action-card-icon {
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* ══════════════════════════
+           CONTENT AREA (movies)
+        ══════════════════════════ */
+        .content-area {
+            padding: 2.5rem 3.5rem 3rem;
+            flex: 1;
+            animation: fadeUp 0.7s 0.15s cubic-bezier(0.16,1,0.3,1) both;
+        }
+
+        /* Section heading */
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .section-heading h2 {
+            font-family: var(--serif);
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.03em;
+            text-align: left;
+        }
+
+        .heading-gem { color: var(--gold); font-size: 0.55rem; opacity: 0.85; }
+
+        .section-heading::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--border), transparent);
+        }
+
+        /* Movie grid — LANDSCAPE: wider cards */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1.1rem;
+        }
+
+        .movie-card {
+            cursor: pointer;
+            border-radius: 4px;
+            overflow: hidden;
+            background: var(--dark-2);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.28s cubic-bezier(0.25,0.46,0.45,0.94),
+                        box-shadow 0.28s ease,
+                        border-color 0.28s ease;
+            position: relative;
+        }
+
+        .movie-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 55%);
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.28s;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-6px) scale(1.025);
+            box-shadow:
+                0 16px 48px rgba(0,0,0,0.75),
+                0 0 0 1px var(--gold),
+                0 0 24px rgba(201,168,76,0.18);
+            border-color: var(--gold);
+        }
+
+        .movie-card:hover::before { opacity: 1; }
+
+        .movie-card img {
+            width: 100%;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .movie-card:hover img { transform: scale(1.05); }
+
+        .movie-card-title {
+            position: relative;
+            z-index: 2;
+            font-family: var(--sans);
+            font-size: 0.74rem;
+            font-weight: 500;
+            color: var(--text);
+            padding: 0.55rem 0.65rem 0.6rem;
+            line-height: 1.3;
+            letter-spacing: 0.02em;
+            background: var(--dark-3);
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+
+        /* Play icon on hover */
+        .movie-card:hover::after {
+            content: '▶';
+            position: absolute;
+            top: 38%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.6rem;
+            color: var(--gold);
+            z-index: 3;
+            opacity: 0.95;
+            text-shadow: 0 2px 16px rgba(0,0,0,0.9);
+            pointer-events: none;
+        }
+
+        /* ══════════════════════════
+           FOOTER
+        ══════════════════════════ */
+        footer {
+            background: var(--dark-2);
+            border-top: 1px solid var(--border);
+            padding: 1rem 3.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-brand {
+            font-family: var(--serif);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 0.06em;
+        }
+
+        .footer-meta {
+            font-size: 0.7rem;
+            font-weight: 300;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            text-align: right;
+        }
+
+        footer p {
+            text-align: right;
+            margin: 0;
+            font-size: 0.7rem;
+            color: var(--muted);
+        }
+
+        /* ══════════════════════════
+           RESPONSIVE
+        ══════════════════════════ */
+        @media (max-width: 960px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 2.5rem 2rem 2rem;
+            }
+            .hero-actions { flex-direction: row; flex-wrap: wrap; }
+            .action-card { flex: 1; min-width: 160px; }
+            .sidebar { display: none; }
+            .content-area { padding: 2rem; }
+        }
+
+        @media (max-width: 640px) {
+            .navbar { padding: 0 1.2rem; }
+            .nav-subtitle { display: none; }
+            .nav-links li a span { display: none; }
+            .nav-links li a { padding: 0.5rem 0.6rem; }
+            .hero { padding: 1.8rem 1.2rem 1.5rem; }
+            .hero-left h1 { font-size: 2.2rem; }
+            .search-panel form { flex-direction: column; }
+            .search-panel input[type="text"] { border-right: 1px solid rgba(255,255,255,0.08); border-radius: 4px; }
+            .search-panel button { border-radius: 4px; width: 100%; margin-top: 0.5rem; }
+            .content-area { padding: 1.5rem 1.2rem; }
+            .movie-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.7rem; }
+            footer { padding: 1rem 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ══ TOP NAVIGATION ══ -->
+    <nav class="navbar">
+        <a href="{{ url_for('main_routes.home') }}" class="nav-brand">
+            <!-- Inline SVG logo -->
+            <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle class="nav-logo-pulse" cx="18" cy="18" r="17"
+                    stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+                <circle class="nav-logo-ring" cx="18" cy="18" r="14"
+                    stroke="#E8C96A" stroke-width="1"
+                    stroke-dasharray="4 3" stroke-linecap="round"/>
+                <circle cx="18" cy="18" r="9" fill="#141414" stroke="#E8C96A" stroke-width="1"/>
+                <polygon points="15,13 15,23 24,18" fill="#E8C96A"/>
+            </svg>
+            <div>
+                <span class="nav-title">CineMatch</span>
+                <span class="nav-subtitle">Cinematic Universe</span>
+            </div>
+        </a>
+
+        <ul class="nav-links">
+            <li>
+                <a href="{{ url_for('main_routes.home') }}">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('main_routes.profile') }}">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <span>Profile</span>
+                </a>
+            </li>
+
+
+
+            <li>
+                <a href="{{ url_for('main_routes.wishlist') }}">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    <span>Wishlist</span>
+                </a>
+            </li>
+
+            <li>
+    <a href="{{ url_for('main_routes.how_it_works') }}">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span>Guide</span>
+    </a>
+</li>
+            <li>
+                <a href="{{ url_for('main_routes.about') }}">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <span>About</span>
+                </a>
+            </li>
+            <li class="nav-signout">
+                <a href="{{ url_for('api.signout') }}">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    <span>Sign Out</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- ══ PAGE BODY ══ -->
+    <div class="page-body">
+
+        <!-- Decorative sidebar -->
+        <aside class="sidebar">
+            <span class="sidebar-label">CineMatch</span>
+            <span class="sidebar-gem">◆</span>
+            <span class="sidebar-gem">◆</span>
+            <div class="film-strip-v">
+                <div class="fhole"></div>
+                <div class="fhole"></div>
+                <div class="fhole"></div>
+                <div class="fhole"></div>
+                <div class="fhole"></div>
+                <div class="fhole"></div>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <div class="main-content">
+
+            <!-- Hero / Search -->
+            <section class="hero">
+                <div class="hero-left">
+                    <h1>Your <em>Cinematic</em><br>Universe Awaits</h1>
+                    <p class="hero-tagline">Discover, explore and track your favourite films</p>
+                    <div class="search-panel">
+                        <form action="{{ url_for('main_routes.search_movies') }}" method="GET">
+                            <input type="text" id="search-bar" name="query"
+                                   placeholder="Search for a movie, director, genre…"
+                                   required
+                                   value="{{ query if query is not none else '' }}">
+                            <button type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="hero-actions">
+                    <button class="action-card"
+                            onclick="location.href='{{ url_for('api.search_genre') }}'">
+                        <span class="action-card-icon">◆</span>
+                        <span>Browse by Genre</span>
+                    </button>
+                    <button class="action-card"
+                            onclick="location.href='{{ url_for('main_routes.recommendation_page') }}'">
+                        <span class="action-card-icon">✦</span>
+                        <span>Get Recommendations</span>
+                    </button>
+                    <button class="action-card"
+                            onclick="location.href='{{ url_for('main_routes.wishlist') }}'">
+                        <span class="action-card-icon">♡</span>
+                        <span>My Watchlist</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Movie Grid -->
+            <div class="content-area">
+                {% if movies is not none and movies|length > 0 %}
+                    <div class="section-heading">
+                        <span class="heading-gem">◆</span>
+                        <h2>Search Results</h2>
+                    </div>
+                    <div class="movie-grid">
+                        {% for movie in movies %}
+                            <div class="movie-card"
+                                 onclick="location.href='{{ url_for('main_routes.movie_details', movie_id=movie.id) }}'">
+                                <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+                                     alt="{{ movie.title }}"
+                                     loading="lazy">
+                                <div class="movie-card-title">{{ movie.title }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="section-heading">
+                        <span class="heading-gem">◆</span>
+                        <h2>Trending Now</h2>
+                    </div>
+                    <div class="movie-grid">
+                        {% for movie in trending_movies %}
+                            <div class="movie-card"
+                                 onclick="location.href='{{ url_for('main_routes.movie_details', movie_id=movie.id) }}'">
+                                <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+                                     alt="{{ movie.title }}"
+                                     loading="lazy">
+                                <div class="movie-card-title">{{ movie.title }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+        </div><!-- /main-content -->
+    </div><!-- /page-body -->
+
+    <!-- ══ FOOTER ══ -->
+   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:     #C9A84C;
+  --gold-lt:  #E8C96A;
+  --gold-dim: rgba(201,168,76,0.13);
+  --black:    #080808;
+  --dark:     #0f0f0f;
+  --dark-2:   #141414;
+  --dark-3:   #1b1b1b;
+  --dark-4:   #222222;
+  --text:     #f5ead8;
+  --text-2:   #d4c4a8;
+  --muted:    #7a6f5e;
+  --border:   rgba(201,168,76,0.2);
+  --serif:    'Cormorant Garamond', Georgia, serif;
+  --sans:     'Jost', system-ui, sans-serif;
+}
+
+.cm-footer {
+  background: var(--dark-2);
+  border-top: 1px solid var(--border);
+  font-family: var(--sans);
+  position: relative;
+  overflow: hidden;
+}
+
+.cm-footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold) 35%, var(--gold-lt) 50%, var(--gold) 65%, transparent 100%);
+}
+
+.cm-footer-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3.5rem 3rem 2rem;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.cm-brand-col {}
+
+.cm-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+  text-decoration: none;
+}
+
+.cm-logo { width: 32px; height: 32px; flex-shrink: 0; }
+
+.cm-brand-text {}
+
+.cm-brand-name {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gold-lt);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  display: block;
+}
+
+.cm-brand-sub {
+  font-size: 0.52rem;
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.cm-tagline {
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  letter-spacing: 0.04em;
+  margin-bottom: 1.5rem;
+}
+
+.cm-socials {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cm-social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--dark-4);
+  border: 1px solid rgba(201,168,76,0.15);
+  border-radius: 3px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.25s, border-color 0.25s, background 0.25s;
+}
+
+.cm-social-btn:hover {
+  color: var(--gold-lt);
+  border-color: var(--gold);
+  background: var(--gold-dim);
+}
+
+.cm-social-btn svg { width: 13px; height: 13px; }
+
+.cm-col-title {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+  display: block;
+}
+
+.cm-col-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.cm-col-links a {
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.25s, padding-left 0.25s;
+}
+
+.cm-col-links a::before {
+  content: '';
+  width: 4px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0;
+  transition: opacity 0.25s, width 0.25s;
+  flex-shrink: 0;
+}
+
+.cm-col-links a:hover {
+  color: var(--gold-lt);
+  padding-left: 2px;
+}
+
+.cm-col-links a:hover::before {
+  opacity: 1;
+  width: 8px;
+}
+
+.cm-footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.2rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.cm-copy {
+  font-size: 0.68rem;
+  font-weight: 300;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+.cm-contact-group {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.cm-gem-divider {
+  color: var(--gold);
+  font-size: 0.45rem;
+  opacity: 0.6;
+}
+
+.cm-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 300;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  transition: color 0.25s;
+}
+
+.cm-contact-item:hover { color: var(--gold-lt); }
+
+.cm-contact-item svg { width: 11px; height: 11px; color: var(--gold); flex-shrink: 0; }
+</style>
+
+<footer class="cm-footer">
+
+  <div class="cm-footer-main">
+
+    <!-- Brand col -->
+    <div class="cm-brand-col">
+      <a class="cm-brand" href="#">
+        <svg class="cm-logo" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="18" r="17" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+          <circle cx="18" cy="18" r="14" stroke="#C9A84C" stroke-width="1" stroke-dasharray="4 3" stroke-linecap="round"/>
+          <circle cx="18" cy="18" r="9" fill="#141414" stroke="#C9A84C" stroke-width="1"/>
+          <polygon points="15,13 15,23 24,18" fill="#C9A84C"/>
+        </svg>
+        <div class="cm-brand-text">
+          <span class="cm-brand-name">CineMatch</span>
+          <span class="cm-brand-sub">Cinematic Universe</span>
+        </div>
+      </a>
+      <p class="cm-tagline">Your personal guide to films worth watching — curated, matched, remembered.</p>
+      <div class="cm-socials">
+        <a class="cm-social-btn" href="#" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a class="cm-social-btn" href="#" title="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </a>
+        <a class="cm-social-btn" href="mailto:zonwc15044@gmail.com" title="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Explore col -->
+    <div>
+      <span class="cm-col-title">◆ &nbsp; Explore</span>
+      <ul class="cm-col-links">
+        <li><a href="#">Browse Movies</a></li>
+        <li><a href="#">Top Picks</a></li>
+        <li><a href="#">New Releases</a></li>
+        <li><a href="#">Collections</a></li>
+        <li><a href="#">Wishlist</a></li>
+      </ul>
+    </div>
+
+    <!-- Company col -->
+    <div>
+      <span class="cm-col-title">◆ &nbsp; Company</span>
+      <ul class="cm-col-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Our Team</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact col -->
+    <div>
+      <span class="cm-col-title">◆ &nbsp; Contact</span>
+      <ul class="cm-col-links">
+        <li>
+          <a href="mailto:zonwc15044@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" style="width:12px;height:12px;flex-shrink:0"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            zonwc15044@gmail.com
+          </a>
+        </li>
+        <li>
+          <a href="tel:7447554712">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" style="width:12px;height:12px;flex-shrink:0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            +91 7447 554 712
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" style="width:12px;height:12px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Help &amp; Support
+          </a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="cm-footer-bottom">
+    <span class="cm-copy">© 2025 CineMatch. All rights reserved.</span>
+    <div class="cm-contact-group">
+      <a class="cm-contact-item" href="mailto:zonwc15044@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        zonwc15044@gmail.com
+      </a>
+      <span class="cm-gem-divider">◆</span>
+      <a class="cm-contact-item" href="tel:7447554712">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        +91 7447 554 712
+      </a>
+      <span class="cm-gem-divider">◆</span>
+      <span class="cm-copy">Made with ♥ for cinema</span>
+    </div>
+  </div>
+
+</footer>
+
+</body>
+</html>

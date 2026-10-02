@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMatch — About</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold:       #C9A84C;
+            --gold-lt:    #E8C96A;
+            --gold-dim:   rgba(201,168,76,0.13);
+            --gold-glow:  rgba(201,168,76,0.08);
+            --black:      #080808;
+            --dark:       #0f0f0f;
+            --dark-2:     #141414;
+            --dark-3:     #1b1b1b;
+            --dark-4:     #222222;
+            --text:       #f5ead8;
+            --text-2:     #d4c4a8;
+            --muted:      #7a6f5e;
+            --border:     rgba(201,168,76,0.2);
+            --serif:      'Cormorant Garamond', Georgia, serif;
+            --sans:       'Jost', system-ui, sans-serif;
+            --nav-h:      68px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--sans);
+            background: var(--black);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 70% 55% at 60% 25%, rgba(201,168,76,0.05) 0%, transparent 65%),
+                radial-gradient(ellipse 45% 50% at 10% 85%, rgba(201,168,76,0.03) 0%, transparent 55%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ══════════════════════════
+           NAVBAR (same as home)
+        ══════════════════════════ */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: var(--nav-h);
+            background: rgba(8,8,8,0.94);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 2.5rem;
+            z-index: 200;
+        }
+
+        .navbar::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .nav-logo-icon { width: 36px; height: 36px; flex-shrink: 0; }
+
+        .nav-logo-ring {
+            animation: spinRing 12s linear infinite;
+            transform-origin: 18px 18px;
+        }
+        @keyframes spinRing { to { transform: rotate(360deg); } }
+
+        .nav-logo-pulse {
+            animation: logoPulse 2.8s ease-in-out infinite;
+            transform-origin: 18px 18px;
+        }
+        @keyframes logoPulse {
+            0%,100% { opacity: 0.25; }
+            50%      { opacity: 0.6; }
+        }
+
+        .nav-title {
+            font-family: var(--serif);
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gold-lt);
+            letter-spacing: 0.04em;
+            line-height: 1;
+        }
+
+        .nav-subtitle {
+            font-size: 0.55rem;
+            font-weight: 300;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--muted);
+            display: block;
+            margin-top: 1px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            margin-left: auto;
+        }
+
+        .nav-links li a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 0.55rem 1rem;
+            border-radius: 3px;
+            border-bottom: 2px solid transparent;
+            transition: color 0.25s, border-color 0.25s, background 0.25s;
+        }
+
+        .nav-links li a:hover {
+            color: var(--gold-lt);
+            background: var(--gold-dim);
+            border-bottom-color: var(--gold);
+        }
+
+        .nav-links li.nav-signout a:hover {
+            color: #e07070;
+            background: rgba(180,50,50,0.1);
+            border-bottom-color: #c05050;
+        }
+
+        .nav-icon { width: 13px; height: 13px; opacity: 0.7; }
+
+        /* ══════════════════════════
+           PAGE WRAPPER
+        ══════════════════════════ */
+        .page-wrap {
+            padding-top: var(--nav-h);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ══════════════════════════
+           HERO BANNER
+        ══════════════════════════ */
+        .about-hero {
+            position: relative;
+            height: 320px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-hero-bg {
+            position: absolute;
+            inset: 0;
+        }
+
+        .about-hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.18;
+            filter: saturate(0.5);
+        }
+
+        /* Gradient overlay */
+        .about-hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to bottom, var(--black) 0%, transparent 30%, transparent 70%, var(--black) 100%),
+                linear-gradient(to right, var(--black) 0%, transparent 25%, transparent 75%, var(--black) 100%);
+        }
+
+        .about-hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity:0; transform: translateY(22px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+
+        .about-hero-eyebrow {
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .about-hero-content h1 {
+            font-family: var(--serif);
+            font-size: 3.8rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 0.04em;
+            line-height: 1.05;
+            margin-bottom: 1rem;
+        }
+
+        .about-hero-content h1 em {
+            font-style: italic;
+            color: var(--gold-lt);
+        }
+
+        .about-hero-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .divider-line { width: 60px; height: 1px; background: var(--border); }
+        .divider-gem  { color: var(--gold); font-size: 0.55rem; }
+
+        /* ══════════════════════════
+           SHARED SECTION STYLES
+        ══════════════════════════ */
+        section { position: relative; z-index: 1; }
+
+        .section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 3rem;
+        }
+
+        .section-label {
+            font-size: 0.6rem;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.6rem;
+            display: block;
+        }
+
+        .section-title {
+            font-family: var(--serif);
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 0.03em;
+            line-height: 1.1;
+            margin-bottom: 0.8rem;
+        }
+
+        .section-title em {
+            font-style: italic;
+            color: var(--gold-lt);
+        }
+
+        .section-hr {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 3rem;
+        }
+
+        .section-hr .line { flex: 1; height: 1px; background: var(--border); max-width: 340px; }
+        .section-hr .gem  { color: var(--gold); font-size: 0.5rem; }
+
+        /* ══════════════════════════
+           MISSION SECTION
+        ══════════════════════════ */
+        .mission-section {
+            background: var(--dark);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .mission-text p {
+            font-size: 0.92rem;
+            font-weight: 300;
+            color: var(--text-2);
+            line-height: 1.85;
+            letter-spacing: 0.04em;
+            margin-bottom: 1.2rem;
+        }
+
+        .mission-text p:last-child { margin-bottom: 0; }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: var(--dark-3);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1.6rem 1.4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .stat-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 8px 32px rgba(201,168,76,0.1);
+        }
+
+        .stat-icon {
+            font-size: 1.6rem;
+            margin-bottom: 0.7rem;
+            display: block;
+        }
+
+        .stat-number {
+            font-family: var(--serif);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--gold-lt);
+            letter-spacing: 0.02em;
+            line-height: 1;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.68rem;
+            font-weight: 400;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        /* ══════════════════════════
+           VALUES SECTION
+        ══════════════════════════ */
+        .values-section {
+            background: var(--dark-2);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .value-card {
+            background: var(--dark-3);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 4px;
+            padding: 2.2rem 1.8rem;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .value-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .value-card:hover {
+            border-color: var(--border);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px var(--border);
+        }
+
+        .value-card:hover::after { opacity: 1; }
+
+        .value-icon {
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            display: block;
+        }
+
+        .value-card h3 {
+            font-family: var(--serif);
+            font-size: 1.45rem;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.03em;
+            margin-bottom: 0.8rem;
+        }
+
+        .value-card p {
+            font-size: 0.82rem;
+            font-weight: 300;
+            color: var(--text-2);
+            line-height: 1.75;
+            letter-spacing: 0.04em;
+        }
+
+        /* ══════════════════════════
+           TEAM SECTION
+        ══════════════════════════ */
+        .team-section {
+            background: var(--dark);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.8rem;
+            max-width: 820px;
+        }
+
+        .team-card {
+            background: var(--dark-2);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+            position: relative;
+        }
+
+        .team-card:hover {
+            border-color: var(--gold);
+            box-shadow:
+                0 16px 48px rgba(0,0,0,0.6),
+                0 0 24px rgba(201,168,76,0.12);
+            transform: translateY(-5px);
+        }
+
+        .team-card-img {
+            position: relative;
+            overflow: hidden;
+            height: 260px;
+        }
+
+        .team-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: saturate(0.85);
+            transition: transform 0.4s ease, filter 0.4s ease;
+        }
+
+        .team-card:hover .team-card-img img {
+            transform: scale(1.04);
+            filter: saturate(1);
+        }
+
+        /* Gold gradient overlay on image */
+        .team-card-img::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(8,8,8,0.7) 0%, transparent 50%);
+        }
+
+        .team-card-body {
+            padding: 1.5rem 1.6rem 1.6rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .team-card-body h3 {
+            font-family: var(--serif);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.03em;
+            margin-bottom: 0.2rem;
+        }
+
+        .team-role {
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .team-quote {
+            font-family: var(--serif);
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--text-2);
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+            padding-left: 0.8rem;
+            border-left: 2px solid var(--border);
+        }
+
+        .team-socials {
+            display: flex;
+            gap: 0.6rem;
+        }
+
+        .team-socials a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--dark-4);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 3px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.25s, border-color 0.25s, background 0.25s;
+        }
+
+        .team-socials a:hover {
+            color: var(--gold-lt);
+            border-color: var(--gold);
+            background: var(--gold-dim);
+        }
+
+        /* SVG social icons */
+        .social-icon { width: 14px; height: 14px; }
+
+        /* ══════════════════════════
+           FOOTER
+        ══════════════════════════ */
+        footer {
+            background: var(--dark-2);
+            border-top: 1px solid var(--border);
+            padding: 1rem 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-brand {
+            font-family: var(--serif);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 0.06em;
+        }
+
+        footer p {
+            font-size: 0.7rem;
+            font-weight: 300;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            text-align: right;
+            margin: 0;
+        }
+
+        /* ══════════════════════════
+           RESPONSIVE
+        ══════════════════════════ */
+        @media (max-width: 960px) {
+            .mission-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+            .values-grid  { grid-template-columns: 1fr 1fr; }
+            .team-grid    { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 640px) {
+            .navbar { padding: 0 1.2rem; }
+            .nav-subtitle { display: none; }
+            .nav-links li a span { display: none; }
+            .nav-links li a { padding: 0.5rem 0.6rem; }
+            .about-hero-content h1 { font-size: 2.5rem; }
+            .section-inner { padding: 3rem 1.5rem; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .values-grid { grid-template-columns: 1fr; }
+            .team-grid   { grid-template-columns: 1fr; }
+            footer { padding: 1rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ══ NAVBAR ══ -->
+    <nav class="navbar">
+        <a href="{{ url_for('main_routes.home') }}" class="nav-brand">
+            <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle class="nav-logo-pulse" cx="18" cy="18" r="17"
+                    stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+                <circle class="nav-logo-ring" cx="18" cy="18" r="14"
+                    stroke="#C9A84C" stroke-width="1"
+                    stroke-dasharray="4 3" stroke-linecap="round"/>
+                <circle cx="18" cy="18" r="9" fill="#141414" stroke="#C9A84C" stroke-width="1"/>
+                <polygon points="15,13 15,23 24,18" fill="#C9A84C"/>
+            </svg>
+            <div>
+                <span class="nav-title">CineMatch</span>
+                <span class="nav-subtitle">Cinematic Universe</span>
+            </div>
+        </a>
+
+        <ul class="nav-links">
+            <li>
+                <a href="{{ url_for('main_routes.home') }}">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('main_routes.profile') }}">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <span>Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('main_routes.wishlist') }}">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    <span>Wishlist</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('main_routes.how_it_works') }}">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    <span>Guide</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('main_routes.about') }}">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <span>About</span>
+                </a>
+            </li>
+            <li class="nav-signout">
+                <a href="{{ url_for('api.signout') }}">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    <span>Sign Out</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="page-wrap">
+
+        <!-- ══ HERO BANNER ══ -->
+        <div class="about-hero">
+            <div class="about-hero-bg">
+                <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&q=80" alt="Cinema background">
+            </div>
+            <div class="about-hero-content">
+                <span class="about-hero-eyebrow">◆ &nbsp; Our Story &nbsp; ◆</span>
+                <h1>About <em>CineMatch</em></h1>
+                <div class="about-hero-divider">
+                    <div class="divider-line"></div>
+                    <span class="divider-gem">◆</span>
+                    <div class="divider-line"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ MISSION ══ -->
+        <section class="mission-section">
+            <div class="section-inner">
+                <span class="section-label">◆ &nbsp; What Drives Us</span>
+                <h2 class="section-title">Our <em>Mission</em></h2>
+                <div class="section-hr">
+                    <div class="line"></div>
+                    <span class="gem">◆</span>
+                </div>
+
+                <div class="mission-grid">
+                    <div class="mission-text">
+                        <p>
+                            At CineMatch, we believe everyone deserves to experience the magic of cinema that resonates with their unique taste. Our mission is to connect movie enthusiasts with films that will move, inspire, and entertain them.
+                        </p>
+                        <p>
+                            Through sophisticated algorithms and a deep understanding of cinematic art, we're revolutionizing how people discover their next favourite movie — one perfect recommendation at a time.
+                        </p>
+                        <p>
+                            We're a team of film lovers who understand that the right movie at the right moment can change everything. That belief drives every feature we build and every recommendation we serve.
+                        </p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-icon">🎬</span>
+                            <span class="stat-number">10K+</span>
+                            <span class="stat-label">Movies Analysed</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">👥</span>
+                            <span class="stat-number">Many</span>
+                            <span class="stat-label">Active Users</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">🎯</span>
+                            <span class="stat-number">95%</span>
+                            <span class="stat-label">Match Accuracy</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">⭐</span>
+                            <span class="stat-number">4.9</span>
+                            <span class="stat-label">User Rating</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ VALUES ══ -->
+        <section class="values-section">
+            <div class="section-inner">
+                <span class="section-label">◆ &nbsp; What We Stand For</span>
+                <h2 class="section-title">Our <em>Values</em></h2>
+                <div class="section-hr">
+                    <div class="line"></div>
+                    <span class="gem">◆</span>
+                </div>
+
+                <div class="values-grid">
+                    <div class="value-card">
+                        <span class="value-icon">🏆</span>
+                        <h3>Excellence</h3>
+                        <p>We strive for perfection in our recommendations, constantly refining our algorithms to provide the best possible matches for every user.</p>
+                    </div>
+                    <div class="value-card">
+                        <span class="value-icon">♥</span>
+                        <h3>Passion</h3>
+                        <p>Our love for cinema drives everything we do — from curating content to developing new features that deepen your connection with film.</p>
+                    </div>
+                    <div class="value-card">
+                        <span class="value-icon">🌐</span>
+                        <h3>Community</h3>
+                        <p>We believe in the power of shared experiences and foster a vibrant community of movie lovers who inspire and discover together.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+
+    </div><!-- /page-wrap -->
+
+    <!-- ══ FOOTER ══ -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:     #C9A84C;
+  --gold-lt:  #E8C96A;
+  --gold-dim: rgba(201,168,76,0.13);
+  --black:    #080808;
+  --dark:     #0f0f0f;
+  --dark-2:   #141414;
+  --dark-3:   #1b1b1b;
+  --dark-4:   #222222;
+  --text:     #f5ead8;
+  --text-2:   #d4c4a8;
+  --muted:    #7a6f5e;
+  --border:   rgba(201,168,76,0.2);
+  --serif:    'Cormorant Garamond', Georgia, serif;
+  --sans:     'Jost', system-ui, sans-serif;
+}
+
+.cm-footer {
+  background: var(--dark-2);
+  border-top: 1px solid var(--border);
+  font-family: var(--sans);
+  position: relative;
+  overflow: hidden;
+}
+
+.cm-footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold) 35%, var(--gold-lt) 50%, var(--gold) 65%, transparent 100%);
+}
+
+.cm-footer-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3.5rem 3rem 2rem;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.cm-brand-col {}
+
+.cm-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+  text-decoration: none;
+}
+
+.cm-logo { width: 32px; height: 32px; flex-shrink: 0; }
+
+.cm-brand-text {}
+
+.cm-brand-name {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gold-lt);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  display: block;
+}
+
+.cm-brand-sub {
+  font-size: 0.52rem;
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.cm-tagline {
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  letter-spacing: 0.04em;
+  margin-bottom: 1.5rem;
+}
+
+.cm-socials {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cm-social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--dark-4);
+  border: 1px solid rgba(201,168,76,0.15);
+  border-radius: 3px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.25s, border-color 0.25s, background 0.25s;
+}
+
+.cm-social-btn:hover {
+  color: var(--gold-lt);
+  border-color: var(--gold);
+  background: var(--gold-dim);
+}
+
+.cm-social-btn svg { width: 13px; height: 13px; }
+
+.cm-col-title {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+  display: block;
+}
+
+.cm-col-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.cm-col-links a {
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.25s, padding-left 0.25s;
+}
+
+.cm-col-links a::before {
+  content: '';
+  width: 4px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0;
+  transition: opacity 0.25s, width 0.25s;
+  flex-shrink: 0;
+}
+
+.cm-col-links a:hover {
+  color: var(--gold-lt);
+  padding-left: 2px;
+}
+
+.cm-col-links a:hover::before {
+  opacity: 1;
+  width: 8px;
+}
+
+.cm-footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.2rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.cm-copy {
+  font-size: 0.68rem;
+  font-weight: 300;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+.cm-contact-group {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.cm-gem-divider {
+  color: var(--gold);
+  font-size: 0.45rem;
+  opacity: 0.6;
+}
+
+.cm-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 300;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  transition: color 0.25s;
+}
+
+.cm-contact-item:hover { color: var(--gold-lt); }
+
+.cm-contact-item svg { width: 11px; height: 11px; color: var(--gold); flex-shrink: 0; }
+</style>
+
+<footer class="cm-footer">
+
+  <div class="cm-footer-main">
+
+    <!-- Brand col -->
+    <div class="cm-brand-col">
+      <a class="cm-brand" href="#">
+        <svg class="cm-logo" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="18" r="17" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+          <circle cx="18" cy="18" r="14" stroke="#C9A84C" stroke-width="1" stroke-dasharray="4 3" stroke-linecap="round"/>
+          <circle cx="18" cy="18" r="9" fill="#141414" stroke="#C9A84C" stroke-width="1"/>
+          <polygon points="15,13 15,23 24,18" fill="#C9A84C"/>
+        </svg>
+        <div class="cm-brand-text">
+          <span class="cm-brand-name">CineMatch</span>
+          <span class="cm-brand-sub">Cinematic Universe</span>
+        </div>
+      </a>
+      <p class="cm-tagline">Your personal guide to films worth watching — curated, matched, remembered.</p>
+      <div class="cm-socials">
+        <a class="cm-social-btn" href="#" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a class="cm-social-btn" href="#" title="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </a>
+        <a class="cm-social-btn" href="mailto:zonwc15044@gmail.com" title="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Explore col -->
+    <div>
+      <span class="cm-col-title">◆ &nbsp; Explore</span>
+      <ul class="cm-col-links">
+        <li><a href="#">Browse Movies</a></li>
+        <li><a href="#">Top Picks</a></li>
+        <li><a href="#">New Releases</a></li>
+        <li><a href="#">Collections</a></li>
+        <li><a href="#">Wishlist</a></li>
+      </ul>
+    </div>
+
+    <!-- Company col -->
+    <div>
+      <span class="cm-col-title">◆ &nbsp; Company</span>
+      <ul class="cm-col-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Our Team</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact col -->
+    <div>
+      <span class="cm-col-title">◆ &nbsp; Contact</span>
+      <ul class="cm-col-links">
+        <li>
+          <a href="mailto:zonwc15044@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" style="width:12px;height:12px;flex-shrink:0"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            zonwc15044@gmail.com
+          </a>
+        </li>
+        <li>
+          <a href="tel:7447554712">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" style="width:12px;height:12px;flex-shrink:0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            +91 7447 554 712
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" style="width:12px;height:12px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Help &amp; Support
+          </a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="cm-footer-bottom">
+    <span class="cm-copy">© 2025 CineMatch. All rights reserved.</span>
+    <div class="cm-contact-group">
+      <a class="cm-contact-item" href="mailto:zonwc15044@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        zonwc15044@gmail.com
+      </a>
+      <span class="cm-gem-divider">◆</span>
+      <a class="cm-contact-item" href="tel:7447554712">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        +91 7447 554 712
+      </a>
+      <span class="cm-gem-divider">◆</span>
+      <span class="cm-copy">Made with ♥ for cinema</span>
+    </div>
+  </div>
+
+</footer>
+
+</body>
+</html>

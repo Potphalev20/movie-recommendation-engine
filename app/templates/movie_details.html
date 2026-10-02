@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ movie.title }} — CineMatch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold:      #C9A84C;
+            --gold-lt:   #E8C96A;
+            --gold-dim:  rgba(201,168,76,0.13);
+            --black:     #080808;
+            --dark:      #0f0f0f;
+            --dark-2:    #141414;
+            --dark-3:    #1b1b1b;
+            --dark-4:    #222222;
+            --text:      #f5ead8;
+            --text-2:    #d4c4a8;
+            --muted:     #7a6f5e;
+            --border:    rgba(201,168,76,0.2);
+            --serif:     'Cormorant Garamond', Georgia, serif;
+            --sans:      'Jost', system-ui, sans-serif;
+            --nav-h:     68px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--sans);
+            background: var(--black);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background:
+                radial-gradient(ellipse 70% 55% at 65% 30%, rgba(201,168,76,0.05) 0%, transparent 65%),
+                radial-gradient(ellipse 40% 50% at 10% 80%, rgba(201,168,76,0.03) 0%, transparent 55%);
+            pointer-events: none; z-index: 0;
+        }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: var(--nav-h);
+            background: rgba(8,8,8,0.94);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center;
+            padding: 0 2.5rem; z-index: 200;
+        }
+        .navbar::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+        }
+        .nav-brand {
+            display: flex; align-items: center; gap: 0.9rem;
+            text-decoration: none; flex-shrink: 0;
+        }
+        .nav-logo { width: 36px; height: 36px; flex-shrink: 0; }
+        .nav-logo-ring { animation: spinRing 12s linear infinite; transform-origin: 18px 18px; }
+        @keyframes spinRing { to { transform: rotate(360deg); } }
+        .nav-logo-pulse { animation: logoPulse 2.8s ease-in-out infinite; transform-origin: 18px 18px; }
+        @keyframes logoPulse { 0%,100% { opacity:.25; } 50% { opacity:.6; } }
+        .nav-title { font-family: var(--serif); font-size: 1.75rem; font-weight: 700; color: var(--gold-lt); letter-spacing: .04em; line-height:1; }
+        .nav-subtitle { font-size: .55rem; font-weight: 300; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); display: block; margin-top: 1px; }
+        .nav-links { list-style: none; display: flex; align-items: center; gap: .2rem; margin-left: auto; }
+        .nav-links li a {
+            display: flex; align-items: center; gap: .5rem;
+            text-decoration: none; font-size: .72rem; font-weight: 500;
+            letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+            padding: .55rem 1rem; border-radius: 3px; border-bottom: 2px solid transparent;
+            transition: color .25s, border-color .25s, background .25s;
+        }
+        .nav-links li a:hover { color: var(--gold-lt); background: var(--gold-dim); border-bottom-color: var(--gold); }
+        .nav-links li.nav-signout a:hover { color: #e07070; background: rgba(180,50,50,.1); border-bottom-color: #c05050; }
+        .nav-icon { width: 13px; height: 13px; opacity: .7; }
+
+        /* ── PAGE ── */
+        .page-wrap { padding-top: var(--nav-h); position: relative; z-index: 1; }
+
+        /* ── HERO BACKDROP ── */
+        .movie-hero {
+            position: relative; height: 380px; overflow: hidden;
+            display: flex; align-items: flex-end;
+        }
+        .hero-bg { position: absolute; inset: 0; }
+        .hero-bg img {
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: top;
+            opacity: .22; filter: saturate(.5) blur(2px);
+        }
+        .hero-bg::after {
+            content: ''; position: absolute; inset: 0;
+            background:
+                linear-gradient(to top, var(--black) 0%, rgba(8,8,8,.6) 55%, transparent 100%),
+                linear-gradient(to right, var(--black) 0%, transparent 40%);
+        }
+        .hero-title-block {
+            position: relative; z-index: 2;
+            padding: 0 3.5rem 2.5rem;
+        }
+        .hero-eyebrow {
+            font-size: .62rem; font-weight: 500; letter-spacing: .28em;
+            text-transform: uppercase; color: var(--gold); margin-bottom: .5rem; display: block;
+        }
+        .hero-title-block h1 {
+            font-family: var(--serif); font-size: 3.2rem; font-weight: 700;
+            color: var(--text); letter-spacing: .02em; line-height: 1.05;
+        }
+
+        /* ── MAIN CONTENT GRID ── */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 3rem;
+            padding: 3rem 3.5rem;
+            max-width: 1300px;
+            margin: 0 auto;
+            /*
+              FIX: align-items: start is REQUIRED for position:sticky to work
+              on a child of a grid container. Without it, the child stretches
+              to fill the row height and sticky has nothing to stick to.
+            */
+            align-items: start;
+        }
+
+        /* ══════════════════════════════════════════════
+           POSTER COLUMN — THE FIX IS HERE
+           ══════════════════════════════════════════════
+
+           THE BUG:
+           Previously .poster-frame had position:sticky, but the
+           wishlist <form> + <button> was OUTSIDE .poster-frame,
+           sitting after it in .poster-col as a sibling element.
+
+           When you scrolled down:
+             • The poster frame stuck to the viewport (correct)
+             • The button stayed in normal document flow and
+               scrolled away BEHIND the sticky poster
+           → Button appeared to "move up" and disappear under the poster.
+
+           THE FIX:
+           Move the wishlist button INSIDE .poster-frame so the
+           entire poster + button block sticks together as one unit.
+           .poster-col is now just a plain wrapper with no special
+           positioning of its own — only .poster-sticky is sticky.
+        ══════════════════════════════════════════════ */
+        .poster-col {
+            /* plain wrapper — no position needed here */
+        }
+
+        .poster-sticky {
+            /*
+              This single element contains BOTH the poster image
+              and the wishlist button. The whole block sticks together.
+            */
+            position: sticky;
+            top: calc(var(--nav-h) + 1.5rem);
+
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 60px rgba(0,0,0,.7), 0 0 0 1px var(--border);
+
+            /* Stack poster image on top, button at the bottom */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .poster-sticky img {
+            width: 100%;
+            display: block;
+            /* Prevent image from stretching endlessly on very tall pages */
+            max-height: 70vh;
+            object-fit: cover;
+        }
+
+        /* Wishlist button — now INSIDE the sticky container */
+        .wishlist-btn {
+            width: 100%;
+            /* no margin-top needed — it sits directly below the image */
+            display: flex; align-items: center; justify-content: center; gap: .6rem;
+            padding: .9rem 1.2rem;
+            background: var(--gold); color: #060606;
+            border: none;
+            /* square bottom corners match the sticky container's border-radius */
+            border-radius: 0;
+            border-top: 1px solid rgba(0,0,0,0.3);
+            font-family: var(--sans); font-size: .73rem; font-weight: 600;
+            letter-spacing: .16em; text-transform: uppercase;
+            cursor: pointer;
+            transition: background .25s, box-shadow .25s;
+            flex-shrink: 0;
+        }
+        .wishlist-btn:hover {
+            background: var(--gold-lt);
+        }
+        .wishlist-btn.in-list {
+            background: var(--dark-3);
+            border-top: 1px solid var(--border);
+            color: var(--gold-lt);
+        }
+        .wishlist-btn.in-list:hover {
+            background: rgba(180,50,50,.15);
+            color: #e07070;
+        }
+
+        /* ── DETAIL PANEL ── */
+        .detail-col { display: flex; flex-direction: column; gap: 2rem; }
+
+        /* Meta strip */
+        .meta-strip {
+            display: flex; flex-wrap: wrap; gap: .8rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .meta-badge {
+            display: flex; align-items: center; gap: .45rem;
+            background: var(--dark-3);
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 3px;
+            padding: .4rem .85rem;
+            font-size: .75rem; font-weight: 500;
+            color: var(--text-2); letter-spacing: .06em;
+        }
+        .meta-badge strong { color: var(--gold-lt); font-weight: 600; }
+
+        /* Rating badge */
+        .rating-badge {
+            display: flex; align-items: center; gap: .45rem;
+            background: var(--gold-dim);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: .4rem .85rem;
+            font-size: .75rem; font-weight: 600;
+            color: var(--gold-lt); letter-spacing: .06em;
+        }
+
+        /* Genre tags */
+        .genre-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+        .genre-tag {
+            font-size: .65rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+            color: var(--gold); border: 1px solid var(--border);
+            border-radius: 2px; padding: .3rem .75rem;
+            background: var(--gold-dim);
+        }
+
+        /* Overview */
+        .block-label {
+            font-size: .6rem; font-weight: 600; letter-spacing: .28em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: .7rem; display: block;
+        }
+        .overview-text {
+            font-size: .92rem; font-weight: 300; color: var(--text-2);
+            line-height: 1.85; letter-spacing: .04em;
+        }
+
+        /* ── INFO CARDS ── */
+        .info-card {
+            background: var(--dark-2);
+            border: 1px solid var(--border);
+            border-radius: 5px; overflow: hidden;
+        }
+        .info-card-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: .8rem;
+        }
+        .info-card-header h3 {
+            font-family: var(--serif); font-size: 1.3rem; font-weight: 600;
+            color: var(--text); letter-spacing: .03em;
+        }
+        .card-gem { color: var(--gold); font-size: .5rem; }
+        .info-card-body { padding: 1.5rem; }
+
+        /* Production companies */
+        .companies-text {
+            font-size: .88rem; font-weight: 300; color: var(--text-2);
+            line-height: 1.75; letter-spacing: .04em;
+        }
+
+        /* ── TRAILER ── */
+        .trailer-link-row {
+            display: flex; align-items: center; gap: .8rem;
+            margin-bottom: 1rem;
+            padding: .75rem 1rem;
+            background: var(--dark-3);
+            border: 1px solid var(--border); border-radius: 4px;
+            text-decoration: none;
+            transition: border-color .25s, background .25s;
+        }
+        .trailer-link-row:hover { border-color: var(--gold); background: var(--gold-dim); }
+        .trailer-link-row span {
+            font-size: .78rem; font-weight: 500; letter-spacing: .1em;
+            text-transform: uppercase; color: var(--gold-lt);
+        }
+        .yt-icon { width: 28px; height: 28px; flex-shrink: 0; }
+
+        iframe {
+            width: 100%; height: 360px;
+            border: none; border-radius: 4px;
+            display: block;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--dark-2); border-top: 1px solid var(--border);
+            padding: 1rem 3.5rem;
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            flex-wrap: wrap; margin-top: 3rem;
+        }
+        .footer-brand { font-family: var(--serif); font-size: 1.1rem; font-weight: 600; color: var(--gold); letter-spacing: .06em; }
+        footer p { font-size: .7rem; font-weight: 300; color: var(--muted); letter-spacing: .06em; text-align: right; margin: 0; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+                padding: 2rem 2rem;
+            }
+            .poster-sticky {
+                /* On mobile, no sticky — poster just flows normally */
+                position: static;
+                max-width: 280px;
+                /* Keep as flex column so button still sits below image */
+                display: flex;
+                flex-direction: column;
+            }
+            .hero-title-block { padding: 0 2rem 2rem; }
+            .hero-title-block h1 { font-size: 2.3rem; }
+        }
+        @media (max-width: 640px) {
+            .navbar { padding: 0 1.2rem; }
+            .nav-subtitle { display: none; }
+            .nav-links li a span { display: none; }
+            .nav-links li a { padding: .5rem .6rem; }
+            .main-grid { padding: 1.5rem 1.2rem; }
+            .hero-title-block h1 { font-size: 1.8rem; }
+            iframe { height: 220px; }
+            footer { padding: 1rem 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="{{ url_for('main_routes.home') }}" class="nav-brand">
+            <svg class="nav-logo" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle class="nav-logo-pulse" cx="18" cy="18" r="17" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+                <circle class="nav-logo-ring" cx="18" cy="18" r="14" stroke="#C9A84C" stroke-width="1" stroke-dasharray="4 3" stroke-linecap="round"/>
+                <circle cx="18" cy="18" r="9" fill="#141414" stroke="#C9A84C" stroke-width="1"/>
+                <polygon points="15,13 15,23 24,18" fill="#C9A84C"/>
+            </svg>
+            <div>
+                <span class="nav-title">CineMatch</span>
+                <span class="nav-subtitle">Cinematic Universe</span>
+            </div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('main_routes.home') }}">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span>Home</span>
+            </a></li>
+            <li><a href="{{ url_for('main_routes.profile') }}">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>Profile</span>
+            </a></li>
+            <li><a href="{{ url_for('main_routes.wishlist') }}">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <span>Wishlist</span>
+            </a></li>
+            <li class="nav-signout"><a href="{{ url_for('api.signout') }}">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <span>Sign Out</span>
+            </a></li>
+        </ul>
+    </nav>
+
+    <div class="page-wrap">
+
+        <!-- HERO BANNER -->
+        <div class="movie-hero">
+            <div class="hero-bg">
+                <img src="https://image.tmdb.org/t/p/w1280{{ movie.poster_path }}" alt="{{ movie.title }}">
+            </div>
+            <div class="hero-title-block">
+                <span class="hero-eyebrow">◆ &nbsp; Movie Details</span>
+                <h1>{{ movie.title }}</h1>
+            </div>
+        </div>
+
+        <!-- MAIN GRID -->
+        <div class="main-grid">
+
+            <!-- ═══ POSTER COLUMN ═══
+                 THE FIX: .poster-sticky wraps BOTH the poster image AND
+                 the wishlist button. The entire block scrolls as one unit.
+                 No more button drifting away behind the poster.
+            ═══════════════════════ -->
+            <div class="poster-col">
+                <div class="poster-sticky">
+
+                    <!-- Poster image -->
+                    <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+                         alt="{{ movie.title }}">
+
+                    <!-- Wishlist button lives INSIDE the sticky block -->
+                    <form action="{{ url_for('main_routes.toggle_wishlist', movie_id=movie.id) }}"
+                          method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                        <button type="button"
+                                class="wishlist-btn {% if movie.id in current_user.wishlist_movies %}in-list{% endif %}"
+                                onclick="toggleWishlist({{ movie.id }})">
+                            {% if movie.id in current_user.wishlist_movies %}
+                                ♥ &nbsp; Remove from Wishlist
+                            {% else %}
+                                ♡ &nbsp; Add to Wishlist
+                            {% endif %}
+                        </button>
+                    </form>
+
+                </div><!-- /poster-sticky -->
+            </div><!-- /poster-col -->
+
+            <!-- DETAILS PANEL -->
+            <div class="detail-col">
+
+                <!-- Meta badges -->
+                <div class="meta-strip">
+                    <div class="meta-badge">
+                        <strong>{{ movie.release_date.split('-')[0] if movie.release_date else 'N/A' }}</strong>
+                    </div>
+                    <div class="meta-badge">
+                        <strong>{{ movie.runtime }}</strong>&nbsp;min
+                    </div>
+                    <div class="meta-badge">
+                        <strong>{{ get_full_language_name(movie.original_language) }}</strong>
+                    </div>
+                    <div class="rating-badge">
+                        ★ &nbsp;<strong>{{ "%.1f"|format(movie.vote_average) }}</strong>&nbsp;/ 10
+                    </div>
+                </div>
+
+                <!-- Genres -->
+                <div>
+                    <span class="block-label">◆ &nbsp; Genres</span>
+                    <div class="genre-tags">
+                        {% for genre in movie.genres %}
+                            <span class="genre-tag">{{ genre.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Overview -->
+                <div class="overview-block">
+                    <span class="block-label">◆ &nbsp; Synopsis</span>
+                    <p class="overview-text">{{ movie.overview }}</p>
+                </div>
+
+                <!-- Production companies -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span class="card-gem">◆</span>
+                        <h3>Production</h3>
+                    </div>
+                    <div class="info-card-body">
+                        <p class="companies-text">
+                            {% for company in movie.production_companies %}
+                                {{ company.name }}{% if not loop.last %} &nbsp;·&nbsp; {% endif %}
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Trailer -->
+                {% if movie.trailer_key %}
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span class="card-gem">◆</span>
+                        <h3>Trailer</h3>
+                    </div>
+                    <div class="info-card-body">
+                        <a href="https://www.youtube.com/watch?v={{ movie.trailer_key }}"
+                           target="_blank" class="trailer-link-row">
+                            <svg class="yt-icon" viewBox="0 0 24 24" fill="#E8C96A">
+                                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+                                <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#080808"/>
+                            </svg>
+                            <span>Watch on YouTube</span>
+                        </a>
+                        <iframe src="https://www.youtube.com/embed/{{ movie.trailer_key }}"
+                                allowfullscreen loading="lazy"></iframe>
+                    </div>
+                </div>
+                {% else %}
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span class="card-gem">◆</span>
+                        <h3>Trailer</h3>
+                    </div>
+                    <div class="info-card-body">
+                        <p class="companies-text">No trailer available for this title.</p>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div><!-- /detail-col -->
+        </div><!-- /main-grid -->
+    </div><!-- /page-wrap -->
+
+    <footer>
+        <span class="footer-brand">CineMatch</span>
+        <p>Support: zonwc15044@gmail.com &nbsp;|&nbsp; Contact: 7447554712</p>
+    </footer>
+
+    <!-- Flash toast rendered by script.js -->
+    <div id="flash-messages" style="display:none;"></div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
